@@ -2,6 +2,10 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import os
+from pathlib import Path
+import dj_database_url
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -73,10 +77,10 @@ DATABASES = {
 }
 
 
-DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
-SECRET_KEY = "qh%_-owsvbwcq7dwzrd@9l^k8@ni+7ql=e&sl3-u(y)5tuk98!"
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-only")
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "no-reply@vantagelinguahub.com"
