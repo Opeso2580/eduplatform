@@ -1,0 +1,257 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Vantage Educational Services | Student Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body{
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+
+      /* Full page background */
+      background-image: url("{% static 'images/login-bg.png' %}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      position: relative;
+    }
+
+    /* ---------- TOP LEFT HOME BUTTON ---------- */
+    .top-nav {
+      position: absolute;
+      top: 24px;
+      left: 15px;
+      z-index: 100;
+    }
+
+    .home-link {
+      padding: 8px 18px;
+      border-radius: 12px;
+      border: 2px solid #4a6cf7;
+      background: transparent;
+      color: #4a6cf7;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .home-link:hover {
+      background: #4a6cf7;
+      color: #fff;
+    }
+
+    /* ---------- MAIN SHELL ---------- */
+    .shell{
+      width: min(1100px, 96vw);
+      height: min(620px, 92vh);
+
+      border-radius: 28px;
+      overflow: hidden;
+
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      box-shadow: 0 28px 80px rgba(0,0,0,0.25);
+      backdrop-filter: blur(10px);
+
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ---------- LEFT ILLUSTRATION ---------- */
+    .left{
+      position: relative;
+      background: rgba(255,255,255,0.10);
+    }
+
+    .left::before{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("{% static 'images/login-illustration-objects.png' %}");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center bottom;
+    }
+
+    .left::after{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,0.18), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+    }
+
+    /* ---------- RIGHT PANEL ---------- */
+    .right{
+      position: relative;
+      padding: 54px 54px 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.28));
+      backdrop-filter: blur(12px);
+    }
+
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 26px;
+      color: #1f2937;
+    }
+
+    .logo{
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #fff;
+      background: linear-gradient(135deg, #4a6cf7, #8b5cf6);
+      box-shadow: 0 12px 22px rgba(74,108,247,0.25);
+    }
+
+    .subtitle{
+      margin: 4px 0 22px 68px;
+      color: rgba(31,41,55,0.70);
+      font-size: 14px;
+    }
+
+    .field{ margin-bottom: 14px; }
+
+    input{
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 15px;
+      border-radius: 14px;
+      border: 1px solid rgba(31,41,55,0.14);
+      background: rgba(255,255,255,0.75);
+      outline: none;
+    }
+
+    input:focus{
+      border-color: rgba(74,108,247,0.55);
+      box-shadow: 0 0 0 4px rgba(74,108,247,0.12);
+      background: rgba(255,255,255,0.92);
+    }
+
+    .row{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      margin: 10px 0 16px;
+    }
+
+    .btn{
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #4a6cf7, #3b5be0);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 16px 28px rgba(74,108,247,0.28);
+    }
+
+    .links{
+      margin-top: 16px;
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    a{
+      color: #3b5be0;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .divider{
+      height: 1px;
+      background: rgba(31,41,55,0.12);
+      margin: 18px 0;
+    }
+
+    .footer{
+      position: absolute;
+      bottom: 22px;
+      left: 54px;
+      right: 54px;
+      font-size: 13px;
+      color: rgba(31,41,55,0.55);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 980px){
+      .shell{ grid-template-columns: 1fr; height: auto; }
+      .left{ min-height: 340px; }
+      .right{ padding: 34px 22px 70px; }
+      .subtitle{ margin-left: 0; }
+      .footer{ left: 22px; right: 22px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HOME BUTTON -->
+  <div class="top-nav">
+    <a href="{% url 'home' %}" class="home-link">← Home</a>
+  </div>
+
+  <div class="shell">
+    <section class="left" aria-hidden="true"></section>
+
+    <section class="right">
+      <div class="brand">
+        <div class="logo">VLH</div>
+        <div>Vantage Educational Services</div>
+      </div>
+      <div class="subtitle">Student Login</div>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="field">
+          <input type="text" name="username" placeholder="Username" required>
+        </div>
+
+        <div class="field">
+          <input type="password" name="password" placeholder="Password" required>
+        </div>
+
+        <div class="row">
+          <label><input type="checkbox"> Remember me</label>
+          <a href="{% url 'password_reset' %}">Forgot password?</a>
+        </div>
+
+        <button class="btn" type="submit">Log in</button>
+
+        <div class="links">
+          New student? <a href="{% url 'student_signup' %}">Create an account</a><br>
+          Admin? <a href="/admin/">Go to admin</a>
+        </div>
+      </form>
+
+      <div class="footer">
+        © {% now "Y" %} Vantage Educational Services · <a href="#">Privacy</a> · <a href="#">Support</a>
+      </div>
+    </section>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Vantage Lingua Hub | Verify Email</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: #f5f7fb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: #fff;
+      width: 100%;
+      max-width: 420px;
+      padding: 32px;
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    .brand {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    .error-box {
+      background: #ffe5e5;
+      color: #b00020;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      outline: none;
+      text-align: center;
+      letter-spacing: 4px;
+    }
+
+    input:focus {
+      border-color: #4a6cf7;
+      box-shadow: 0 0 0 2px rgba(74,108,247,0.15);
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: #4a6cf7;
+      color: #fff;
+      font-weight: 600;
+      margin-top: 14px;
+    }
+
+    button:hover {
+      background: #3b5be0;
+    }
+
+    .links {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .links a {
+      color: #4a6cf7;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="brand">Vantage Lingua Hub</div>
+    <div class="subtitle">
+      Enter the 6-digit code sent to<br>
+      <strong>{{ email }}</strong>
+    </div>
+
+    {% if error %}
+      <div class="error-box">{{ error }}</div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.code }}
+      <button type="submit">Verify & Continue</button>
+    </form>
+
+    <div class="links">
+      Didn’t get the code?
+      <a href="{% url 'resend_code' %}">Resend</a>
+    </div>
+  </div>
+</body>
+</html>

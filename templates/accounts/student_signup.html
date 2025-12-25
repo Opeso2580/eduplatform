@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Vantage Educational Services | Create Account</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: #f5f7fb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #fff;
+      width: 100%;
+      max-width: 520px;
+      padding: 32px;
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    .brand {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 22px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    @media (min-width: 560px) {
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .grid-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .field { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #444;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 15px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #4a6cf7;
+      box-shadow: 0 0 0 2px rgba(74,108,247,0.15);
+    }
+
+    .error {
+      color: #b00020;
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: #4a6cf7;
+      color: #fff;
+      font-weight: 600;
+      margin-top: 18px;
+    }
+
+    button:hover { background: #3b5be0; }
+
+    .links {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .links a {
+      color: #4a6cf7;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="brand">Vantage Educational Services</div>
+    <div class="subtitle">Create Student Account</div>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="error" style="margin-bottom:12px;">
+          {% for e in form.non_field_errors %}
+            <div>{{ e }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <!-- Names -->
+      <div class="grid grid-3" style="margin-bottom:14px;">
+        <div class="field">
+          <label>First name</label>
+          <input type="text" name="first_name" placeholder="First name"
+                 value="{{ form.first_name.value|default_if_none:'' }}">
+          {% for e in form.first_name.errors %}
+            <div class="error">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="field">
+          <label>Middle name</label>
+          <input type="text" name="middle_name" placeholder="Middle name (optional)"
+                 value="{{ form.middle_name.value|default_if_none:'' }}">
+          {% for e in form.middle_name.errors %}
+            <div class="error">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="field">
+          <label>Last name</label>
+          <input type="text" name="last_name" placeholder="Last name"
+                 value="{{ form.last_name.value|default_if_none:'' }}">
+          {% for e in form.last_name.errors %}
+            <div class="error">{{ e }}</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Account -->
+      <div class="grid grid-2">
+        <div class="field">
+          <label>Username</label>
+          <input type="text" name="username" placeholder="Choose a username"
+                 value="{{ form.username.value|default_if_none:'' }}" required>
+          {% for e in form.username.errors %}
+            <div class="error">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="you@example.com"
+                 value="{{ form.email.value|default_if_none:'' }}" required>
+          {% for e in form.email.errors %}
+            <div class="error">{{ e }}</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Passwords -->
+      <div class="grid grid-2" style="margin-top:14px;">
+        <div class="field">
+          <label>Password</label>
+          <input type="password" name="password1" placeholder="Create a password" required>
+          {% for e in form.password1.errors %}
+            <div class="error">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="field">
+          <label>Confirm Password</label>
+          <input type="password" name="password2" placeholder="Confirm password" required>
+          {% for e in form.password2.errors %}
+            <div class="error">{{ e }}</div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <button type="submit">Create Account</button>
+    </form>
+
+    <div class="links">
+      Already have an account?
+      <a href="{% url 'student_login' %}">Log in</a>
+    </div>
+  </div>
+</body>
+</html>
