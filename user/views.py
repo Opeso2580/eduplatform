@@ -2,6 +2,8 @@ import secrets
 import logging
 import socket
 
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
@@ -15,12 +17,9 @@ User = get_user_model()
 logger = logging.getLogger(__name__)
 
 
+
 def safe_send_verification_email(user, code, subject):
-    """
-    Sends verification email without crashing the request.
-    If email fails, we log + PRINT the TEMP code so you can grab it from Render Runtime Logs.
-    """
-    message = (
+    message_text = (
         f"Hi {user.first_name or 'there'},\n\n"
         "Thank you for signing up for Vantage Lingua Hub! 🎉\n\n"
         "To complete your registration, please enter the 6-digit verification code below:\n\n"
@@ -32,26 +31,19 @@ def safe_send_verification_email(user, code, subject):
     )
 
     try:
-        # Prevent long hangs that cause Gunicorn worker timeouts
-        socket.setdefaulttimeout(10)
-
-        send_mail(
-            subject=subject,
-            message=message,
+        sg = SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
+        mail = Mail(
             from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[user.email],
-            fail_silently=False,
+            to_emails=user.email,
+            subject=subject,
+            plain_text_content=message_text,
         )
+        sg.send(mail)
         return True
 
     except Exception as e:
-        logger.exception("Email send failed for %s: %s", getattr(user, "email", ""), e)
-
-        # Logging can be muted depending on config; print ALWAYS appears in Render runtime logs
+        logger.exception("SendGrid API send failed for %s: %s", getattr(user, "email", ""), e)
         print(f"TEMP VERIFY CODE for {getattr(user, 'email', '')} is: {code}")
-
-        # Keep warning too (helpful if logs are configured to show it)
-        logger.warning("TEMP VERIFY CODE for %s is: %s", getattr(user, "email", ""), code)
         return False
 
 
