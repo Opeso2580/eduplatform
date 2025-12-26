@@ -8,7 +8,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ----------------------------
 # Core settings
 # ----------------------------
-SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", "")
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-only")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
