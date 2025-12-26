@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 def safe_send_verification_email(user, code, subject):
     """
     Sends verification email without crashing the request.
-    If email fails, we log the error + TEMP code so you can verify via Render logs.
+    If email fails, we log + PRINT the TEMP code so you can grab it from Render Runtime Logs.
     """
     message = (
         f"Hi {user.first_name or 'there'},\n\n"
@@ -46,6 +46,11 @@ def safe_send_verification_email(user, code, subject):
 
     except Exception as e:
         logger.exception("Email send failed for %s: %s", getattr(user, "email", ""), e)
+
+        # Logging can be muted depending on config; print ALWAYS appears in Render runtime logs
+        print(f"TEMP VERIFY CODE for {getattr(user, 'email', '')} is: {code}")
+
+        # Keep warning too (helpful if logs are configured to show it)
         logger.warning("TEMP VERIFY CODE for %s is: %s", getattr(user, "email", ""), code)
         return False
 
@@ -110,6 +115,10 @@ def student_signup(request):
 
         # ✅ generate and store code
         code = f"{secrets.randbelow(10**6):06d}"
+
+        # Print for debugging (guaranteed visible in Render logs)
+        print(f"SIGNUP VERIFY CODE for {user.email} is: {code}")
+
         user.set_verification_code(code, minutes_valid=10)
         user.save()
 
@@ -180,6 +189,10 @@ def resend_code(request):
         return redirect("student_login")
 
     code = f"{secrets.randbelow(10**6):06d}"
+
+    # Print for debugging (guaranteed visible in Render logs)
+    print(f"RESEND VERIFY CODE for {user.email} is: {code}")
+
     user.set_verification_code(code, minutes_valid=10)
     user.save()
 
