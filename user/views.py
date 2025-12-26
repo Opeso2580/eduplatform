@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 def safe_send_verification_email(user, code, subject):
     """
     Sends verification email without crashing the request.
-    If email fails, we log the error and allow the flow to continue.
+    If email fails, we log the error + TEMP code so you can verify via Render logs.
     """
     message = (
         f"Hi {user.first_name or 'there'},\n\n"
@@ -43,8 +43,10 @@ def safe_send_verification_email(user, code, subject):
             fail_silently=False,
         )
         return True
+
     except Exception as e:
         logger.exception("Email send failed for %s: %s", getattr(user, "email", ""), e)
+        logger.warning("TEMP VERIFY CODE for %s is: %s", getattr(user, "email", ""), code)
         return False
 
 
