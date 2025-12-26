@@ -4,17 +4,17 @@
 <head>
   <meta charset="utf-8">
   <title>Vantage Educational Services | Student Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <style>
     * { box-sizing: border-box; }
+    html, body { width: 100%; overflow-x: hidden; }
 
     body{
       margin: 0;
-      min-height: 100vh;
+      min-height: 100svh; /* better on mobile than 100vh */
       font-family: "Segoe UI", Tahoma, sans-serif;
 
-      /* Full page background */
       background-image: url("{% static 'images/login-bg.png' %}");
       background-size: cover;
       background-position: center;
@@ -22,40 +22,40 @@
 
       display: grid;
       place-items: center;
-      padding: 28px;
+      padding: 18px;
       position: relative;
     }
 
     /* ---------- TOP LEFT HOME BUTTON ---------- */
     .top-nav {
-      position: absolute;
-      top: 24px;
-      left: 15px;
-      z-index: 100;
+      position: fixed;               /* fixed so it won’t overlap weirdly */
+      top: max(14px, env(safe-area-inset-top));
+      left: max(14px, env(safe-area-inset-left));
+      z-index: 1000;
     }
 
     .home-link {
-      padding: 8px 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
       border-radius: 12px;
       border: 2px solid #4a6cf7;
-      background: transparent;
+      background: rgba(255,255,255,0.85);
       color: #4a6cf7;
       font-weight: 800;
       text-decoration: none;
       transition: all 0.2s ease;
+      white-space: nowrap;
+      backdrop-filter: blur(8px);
     }
 
-    .home-link:hover {
-      background: #4a6cf7;
-      color: #fff;
-    }
+    .home-link:hover { background: #4a6cf7; color: #fff; }
 
     /* ---------- MAIN SHELL ---------- */
     .shell{
-      width: min(1100px, 96vw);
-      height: min(620px, 92vh);
-
-      border-radius: 28px;
+      width: min(1100px, 100%);
+      border-radius: 24px;
       overflow: hidden;
 
       background: rgba(255,255,255,0.12);
@@ -71,6 +71,7 @@
     .left{
       position: relative;
       background: rgba(255,255,255,0.10);
+      min-height: 520px;
     }
 
     .left::before{
@@ -79,8 +80,8 @@
       inset: 0;
       background-image: url("{% static 'images/login-illustration-objects.png' %}");
       background-repeat: no-repeat;
-      background-size: contain;
-      background-position: center bottom;
+      background-size: min(92%, 520px);
+      background-position: center 60%;
     }
 
     .left::after{
@@ -95,9 +96,11 @@
     /* ---------- RIGHT PANEL ---------- */
     .right{
       position: relative;
-      padding: 54px 54px 30px;
+      padding: 44px 44px 26px;
       background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.28));
       backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
     }
 
     .brand{
@@ -107,9 +110,11 @@
       font-weight: 800;
       font-size: 26px;
       color: #1f2937;
+      line-height: 1.1;
     }
 
     .logo{
+      flex: 0 0 auto;
       width: 56px;
       height: 56px;
       border-radius: 12px;
@@ -122,7 +127,7 @@
     }
 
     .subtitle{
-      margin: 4px 0 22px 68px;
+      margin: 6px 0 18px;
       color: rgba(31,41,55,0.70);
       font-size: 14px;
     }
@@ -132,17 +137,17 @@
     input{
       width: 100%;
       padding: 14px 16px;
-      font-size: 15px;
+      font-size: 16px; /* iOS: prevents zoom on focus */
       border-radius: 14px;
       border: 1px solid rgba(31,41,55,0.14);
-      background: rgba(255,255,255,0.75);
+      background: rgba(255,255,255,0.80);
       outline: none;
     }
 
     input:focus{
       border-color: rgba(74,108,247,0.55);
       box-shadow: 0 0 0 4px rgba(74,108,247,0.12);
-      background: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.95);
     }
 
     .row{
@@ -151,6 +156,15 @@
       align-items: center;
       font-size: 14px;
       margin: 10px 0 16px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .row label{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
     }
 
     .btn{
@@ -167,7 +181,7 @@
     }
 
     .links{
-      margin-top: 16px;
+      margin-top: 14px;
       font-size: 14px;
       line-height: 1.9;
     }
@@ -178,17 +192,9 @@
       font-weight: 700;
     }
 
-    .divider{
-      height: 1px;
-      background: rgba(31,41,55,0.12);
-      margin: 18px 0;
-    }
-
     .footer{
-      position: absolute;
-      bottom: 22px;
-      left: 54px;
-      right: 54px;
+      margin-top: auto; /* pushes footer to bottom naturally */
+      padding-top: 18px;
       font-size: 13px;
       color: rgba(31,41,55,0.55);
       display: flex;
@@ -196,19 +202,51 @@
       flex-wrap: wrap;
     }
 
+    /* ---------- RESPONSIVE ---------- */
     @media (max-width: 980px){
-      .shell{ grid-template-columns: 1fr; height: auto; }
-      .left{ min-height: 340px; }
-      .right{ padding: 34px 22px 70px; }
-      .subtitle{ margin-left: 0; }
-      .footer{ left: 22px; right: 22px; }
+      body{ padding: 14px; }
+
+      .shell{
+        grid-template-columns: 1fr;
+        border-radius: 20px;
+      }
+
+      .left{
+        min-height: 260px;
+      }
+
+      .left::before{
+        background-position: center 55%;
+        background-size: min(92%, 420px);
+      }
+
+      .right{
+        padding: 26px 18px 18px;
+      }
+
+      .brand{
+        font-size: 22px;
+      }
+
+      .logo{
+        width: 52px;
+        height: 52px;
+      }
+
+      .top-nav{
+        position: sticky; /* keeps it at top in mobile scroll */
+        top: 10px;
+        left: 10px;
+        align-self: start;
+        justify-self: start;
+        margin-bottom: 10px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- HOME BUTTON -->
   <div class="top-nav">
     <a href="{% url 'home' %}" class="home-link">← Home</a>
   </div>
@@ -227,11 +265,11 @@
         {% csrf_token %}
 
         <div class="field">
-          <input type="text" name="username" placeholder="Username" required>
+          <input type="text" name="username" placeholder="Username" autocomplete="username" required>
         </div>
 
         <div class="field">
-          <input type="password" name="password" placeholder="Password" required>
+          <input type="password" name="password" placeholder="Password" autocomplete="current-password" required>
         </div>
 
         <div class="row">
