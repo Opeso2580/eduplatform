@@ -1,4 +1,6 @@
 import secrets
+import logging
+import socket
 
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout, get_user_model
@@ -10,6 +12,40 @@ from django.shortcuts import render, redirect
 from .forms import StudentSignUpForm, VerifyCodeForm
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
+
+
+def safe_send_verification_email(user, code, subject):
+    """
+    Sends verification email without crashing the request.
+    If email fails, we log the error and allow the flow to continue.
+    """
+    message = (
+        f"Hi {user.first_name or 'there'},\n\n"
+        "Thank you for signing up for Vantage Lingua Hub! 🎉\n\n"
+        "To complete your registration, please enter the 6-digit verification code below:\n\n"
+        f"{code}\n\n"
+        "This code expires in 10 minutes.\n\n"
+        "If you did not create this account, you may safely ignore this email.\n\n"
+        "Warm regards,\n"
+        "Vantage Lingua Hub Team"
+    )
+
+    try:
+        # Prevent long hangs that cause Gunicorn worker timeouts
+        socket.setdefaulttimeout(10)
+
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+        return True
+    except Exception as e:
+        logger.exception("Email send failed for %s: %s", getattr(user, "email", ""), e)
+        return False
 
 
 def student_login(request):
@@ -75,23 +111,13 @@ def student_signup(request):
         user.set_verification_code(code, minutes_valid=10)
         user.save()
 
-        # ✅ send email (make sure DEFAULT_FROM_EMAIL is set)
-        send_mail(
+        # ✅ send email (non-blocking; won't crash if SMTP fails)
+        sent = safe_send_verification_email(
+            user=user,
+            code=code,
             subject="Welcome to Vantage Lingua Hub – Verify Your Account",
-            message=(
-                f"Hi {user.first_name or 'there'},\n\n"
-                "Thank you for signing up for Vantage Lingua Hub! 🎉\n\n"
-                "To complete your registration, please enter the 6-digit verification code below:\n\n"
-                f"{code}\n\n"
-                "This code expires in 10 minutes.\n\n"
-                "If you did not create this account, you may safely ignore this email.\n\n"
-                "Warm regards,\n"
-                "Vantage Lingua Hub Team"
-            ),
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[user.email],
-            fail_silently=False,
         )
+        request.session["email_sent"] = sent
 
         request.session["pending_user_id"] = user.id
         return redirect("student_verify")
@@ -122,6 +148,7 @@ def student_verify(request):
 
             login(request, user)
             request.session.pop("pending_user_id", None)
+            request.session.pop("email_sent", None)
             return redirect("student_dashboard")
         else:
             error = "Invalid or expired code. Please try again."
@@ -129,7 +156,12 @@ def student_verify(request):
     return render(
         request,
         "accounts/student_verify.html",
-        {"form": form, "error": error, "email": getattr(user, "email", "")},
+        {
+            "form": form,
+            "error": error,
+            "email": getattr(user, "email", ""),
+            "email_sent": request.session.get("email_sent", True),
+        },
     )
 
 
@@ -143,29 +175,18 @@ def resend_code(request):
         return redirect("student_login")
 
     if not getattr(user, "email", ""):
-        # no email to send to
         return redirect("student_login")
 
     code = f"{secrets.randbelow(10**6):06d}"
     user.set_verification_code(code, minutes_valid=10)
     user.save()
 
-    send_mail(
+    sent = safe_send_verification_email(
+        user=user,
+        code=code,
         subject="Vantage Lingua Hub – Your New Verification Code",
-        message=(
-            f"Hi {user.first_name or 'there'},\n\n"
-            "Thank you for using Vantage Lingua Hub.\n\n"
-            "Here is your new 6-digit verification code:\n\n"
-            f"{code}\n\n"
-            "This code expires in 10 minutes.\n\n"
-            "If you did not request this code, you may safely ignore this email.\n\n"
-            "Warm regards,\n"
-            "Vantage Lingua Hub Team"
-        ),
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[user.email],
-        fail_silently=False,
     )
+    request.session["email_sent"] = sent
 
     return redirect("student_verify")
 
@@ -187,7 +208,6 @@ def student_dashboard(request):
 def student_logout(request):
     logout(request)
     return redirect("student_login")
-
 
 
 def home(request):
