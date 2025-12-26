@@ -14,11 +14,11 @@ DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 # Allow comma-separated hosts in env
 ALLOWED_HOSTS = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if h.strip()]
 
-# If you haven't set ALLOWED_HOSTS yet, you can temporarily allow all (not recommended long-term)
+# If not set, allow all (acceptable during early deployment)
 if not ALLOWED_HOSTS:
     ALLOWED_HOSTS = ["*"]
 
-# Render URL CSRF trust (important for forms/auth in production)
+# CSRF trusted origins (Render URL)
 CSRF_TRUSTED_ORIGINS = [
     "https://eduplatform-7hbm.onrender.com",
 ]
@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # your apps
+    # Local apps
     "accounts",
 ]
 
@@ -105,7 +105,6 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# WhiteNoise static storage (recommended)
 STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
@@ -113,18 +112,16 @@ STORAGES = {
 }
 
 # ----------------------------
-# Email configuration
+# Email (SendGrid Web API)
 # ----------------------------
-SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", "")", "")
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", "")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "")
+
 # ----------------------------
-# Security (recommended basics)
+# Security (production)
 # ----------------------------
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-
-
-
