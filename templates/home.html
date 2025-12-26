@@ -18,24 +18,32 @@
     /* ---------- NAV ---------- */
     .nav {
       display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        padding: 18px 48px;
-        background: #f40651;
-        flex-wrap: wrap; /* ✅ allow wrapping when small */
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 48px;
+      background: #f40651;
+      flex-wrap: wrap; /* allow wrap */
     }
 
     .nav .brand {
       font-size: 22px;
       font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .nav-links{
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
     }
 
     .nav a {
       text-decoration: none;
       font-weight: 700;
       color: #111;
-      margin-left: 24px;
+      white-space: nowrap; /* ✅ prevents "Log" / "in" split */
     }
 
     .login-btn {
@@ -43,6 +51,9 @@
       border-radius: 10px;
       border: 2px solid #111;
       background: transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* ---------- HERO ---------- */
@@ -77,16 +88,16 @@
     }
 
     .hero-img img{
-  max-width: 420px;      /* ⬅️ reduce width */
-  max-height: 420px;     /* ⬅️ reduce height */
-  width: 140%;
-  height: auto;
-
-  border-radius: 22px;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.15);
-  object-fit: contain;
-}
-
+      max-width: 420px;
+      width: 100%;          /* ✅ was 140% (overflow on phones) */
+      height: auto;
+      border-radius: 22px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.15);
+      object-fit: contain;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
     /* ---------- STATS ---------- */
     .stats {
@@ -121,6 +132,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
     }
 
     /* ---------- HOW IT WORKS ---------- */
@@ -140,6 +152,7 @@
       border: 1px solid #ddd;
       border-radius: 16px;
       padding: 28px;
+      background: #fff;
     }
 
     .step span {
@@ -155,21 +168,7 @@
       margin-bottom: 14px;
     }
 
-    /* ---------- FOOTER ---------- */
-    footer {
-      padding: 32px;
-      text-align: center;
-      font-size: 14px;
-      color: #555;
-    }
-
-    @media (max-width: 900px) {
-      .hero {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-    }
-
+    /* ---------- SECTIONS ---------- */
     .features {
       padding: 80px 48px;
       background: #fff;
@@ -183,69 +182,123 @@
     }
 
     .feature {
-
       border: 1px solid #ddd;
       border-radius: 18px;
       padding: 32px;
+      background: #fff;
     }
 
-    .feature h3 {
-      margin-top: 0;
-    }
-
+    .feature h3 { margin-top: 0; }
 
     .testimonials {
-  padding: 80px 48px;
-  background: #fafafa;
-}
+      padding: 80px 48px;
+      background: #fafafa;
+    }
 
-.testimonial-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-  margin-top: 32px;
-}
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 32px;
+    }
 
-.testimonial {
-  background: #fff;
-  border-radius: 18px;
-  padding: 28px;
-  border: 1px solid #ddd;
-}
+    .testimonial {
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px;
+      border: 1px solid #ddd;
+    }
 
-.cta-banner {
-  padding: 90px 48px;
-  background: #111;
-  color: #fff;
-  text-align: center;
-}
+    .cta-banner {
+      padding: 90px 48px;
+      background: #111;
+      color: #fff;
+      text-align: center;
+    }
 
-.cta-banner a {
-  display: inline-block;
-  margin-top: 24px;
-  padding: 14px 32px;
-  background: #fc0856;
-  color: #fff;
-  border-radius: 14px;
-  font-weight: 800;
-  text-decoration: none;
-}
+    .cta-banner a {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 14px 32px;
+      background: #fc0856;
+      color: #fff;
+      border-radius: 14px;
+      font-weight: 800;
+      text-decoration: none;
+    }
 
+    .faq {
+      padding: 80px 48px;
+      background: #111;
+      color: #fff;
+    }
 
+    .faq-item {
+      max-width: 720px;
+      margin-bottom: 28px;
+    }
 
-.faq {
-  padding: 80px 48px;
-  background: #111;
-  color: #fff;
-}
+    /* ---------- FOOTER ---------- */
+    footer {
+      padding: 32px;
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+    }
 
-.faq-item {
-  max-width: 720px;
-  margin-bottom: 28px;
-}
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
 
+    @media (max-width: 600px) {
+      .nav {
+        padding: 14px 16px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
 
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+        gap: 12px;
+      }
 
+      .hero {
+        padding: 44px 16px;
+        gap: 22px;
+      }
+
+      .hero h1 {
+        font-size: 40px; /* ✅ better on phones */
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .stats {
+        padding: 28px 16px;
+        grid-template-columns: repeat(2, 1fr); /* ✅ phone-friendly */
+      }
+
+      .languages,
+      .features,
+      .testimonials,
+      .how,
+      .faq,
+      .cta-banner {
+        padding: 52px 16px;
+      }
+
+      .lang-card {
+        padding: 18px;
+      }
+    }
   </style>
 </head>
 
@@ -254,7 +307,9 @@
   <!-- NAV -->
   <nav class="nav">
     <div class="brand">Vantage Educational Services</div>
-    <div>
+
+    <!-- ✅ Added a wrapper class so we can style links properly on mobile -->
+    <div class="nav-links">
       <a href="#">Find tutors</a>
       <a href="#">Courses</a>
       <a href="{% url 'student_login' %}" class="login-btn">Log in</a>
@@ -268,9 +323,10 @@
       <p>Personalized classes with real tutors, real progress.</p>
       <a href="{% url 'student_signup' %}" class="cta">Get started</a>
     </div>
+
     <div class="hero-img">
-  <img src="{% static 'images/homepage1.png' %}" alt="Online language learning">
-</div>
+      <img src="{% static 'images/homepage1.png' %}" alt="Online language learning">
+    </div>
   </section>
 
   <!-- STATS -->
@@ -294,7 +350,7 @@
       <div class="lang-card">Anatomy and Physiology →</div>
       <div class="lang-card">Physics →</div>
       <div class="lang-card">Calculus →</div>
-      <div class="lang-card">English→</div>
+      <div class="lang-card">English →</div>
       <div class="lang-card">Chemistry →</div>
       <div class="lang-card">Thermodynamics →</div>
       <div class="lang-card">Fluid Mechanics →</div>
@@ -303,55 +359,51 @@
     </div>
   </section>
 
-    <section class="features">
-  <h2>Why choose Vantage Educational Services?</h2>
-  <div class="features-grid">
-    <div class="feature">
-      <h3>✔ Verified tutors</h3>
-      <p>All tutors are screened for quality, experience, and teaching ability.</p>
+  <section class="features">
+    <h2>Why choose Vantage Educational Services?</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <h3>✔ Verified tutors</h3>
+        <p>All tutors are screened for quality, experience, and teaching ability.</p>
+      </div>
+      <div class="feature">
+        <h3>✔ Flexible learning</h3>
+        <p>Learn at your own pace, on your schedule, from anywhere.</p>
+      </div>
+      <div class="feature">
+        <h3>✔ Personalized lessons</h3>
+        <p>Lessons tailored to your goals — exams, travel, or career growth.</p>
+      </div>
+      <div class="feature">
+        <h3>✔ Secure platform</h3>
+        <p>Safe logins, verified accounts, and privacy-first design.</p>
+      </div>
     </div>
-    <div class="feature">
-      <h3>✔ Flexible learning</h3>
-      <p>Learn at your own pace, on your schedule, from anywhere.</p>
-    </div>
-    <div class="feature">
-      <h3>✔ Personalized lessons</h3>
-      <p>Lessons tailored to your goals — exams, travel, or career growth.</p>
-    </div>
-    <div class="feature">
-      <h3>✔ Secure platform</h3>
-      <p>Safe logins, verified accounts, and privacy-first design.</p>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="testimonials">
-  <h2>What learners say</h2>
-  <div class="testimonial-grid">
-    <div class="testimonial">
-      <p>“I improved my French speaking confidence in just 6 weeks.”</p>
-      <strong>— Amina, Canada</strong>
+  <section class="testimonials">
+    <h2>What learners say</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial">
+        <p>“I improved my French speaking confidence in just 6 weeks.”</p>
+        <strong>— Amina, Canada</strong>
+      </div>
+      <div class="testimonial">
+        <p>“The tutor matched my learning style perfectly.”</p>
+        <strong>— Daniel, Germany</strong>
+      </div>
+      <div class="testimonial">
+        <p>“Best platform I’ve used for structured language learning.”</p>
+        <strong>— Maria, Portugal</strong>
+      </div>
     </div>
-    <div class="testimonial">
-      <p>“The tutor matched my learning style perfectly.”</p>
-      <strong>— Daniel, Germany</strong>
-    </div>
-    <div class="testimonial">
-      <p>“Best platform I’ve used for structured language learning.”</p>
-      <strong>— Maria, Portugal</strong>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="cta-banner">
-  <h2>Ready to start your academic journey?</h2>
-  <p>Join learners from around the world and start today.</p>
-  <a href="{% url 'student_signup' %}">Create a free account</a>
-</section>
-
-
-
-
+  <section class="cta-banner">
+    <h2>Ready to start your academic journey?</h2>
+    <p>Join learners from around the world and start today.</p>
+    <a href="{% url 'student_signup' %}">Create a free account</a>
+  </section>
 
   <!-- HOW IT WORKS -->
   <section class="how">
@@ -375,25 +427,24 @@
     </div>
   </section>
 
-
   <section class="faq">
-  <h2>Frequently asked questions</h2>
+    <h2>Frequently asked questions</h2>
 
-  <div class="faq-item">
-    <h4>Do I need prior language experience?</h4>
-    <p>No. Beginners are welcome — tutors adapt to your level.</p>
-  </div>
+    <div class="faq-item">
+      <h4>Do I need prior language experience?</h4>
+      <p>No. Beginners are welcome — tutors adapt to your level.</p>
+    </div>
 
-  <div class="faq-item">
-    <h4>Can I change tutors?</h4>
-    <p>Yes. You’re free to switch tutors anytime.</p>
-  </div>
+    <div class="faq-item">
+      <h4>Can I change tutors?</h4>
+      <p>Yes. You’re free to switch tutors anytime.</p>
+    </div>
 
-  <div class="faq-item">
-    <h4>Is my data secure?</h4>
-    <p>Yes. We use secure authentication and encrypted connections.</p>
-  </div>
-</section>
+    <div class="faq-item">
+      <h4>Is my data secure?</h4>
+      <p>Yes. We use secure authentication and encrypted connections.</p>
+    </div>
+  </section>
 
   <footer>
     © {% now "Y" %} Vantage Educational Services · Privacy · Support
