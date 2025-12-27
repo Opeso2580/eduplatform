@@ -32,6 +32,13 @@
       line-height: 1.2;
     }
 
+    .nav .brand img {
+      height: 44px;        /* controls logo size */
+      width: auto;
+      display: block;
+    }
+
+
     .nav-links{
       display: flex;
       align-items: center;
@@ -306,7 +313,10 @@
 
   <!-- NAV -->
   <nav class="nav">
-    <div class="brand">Vantage Educational Services</div>
+    <div class="brand">
+      <img src="{% static 'images/vantage-logo.png' %}" alt="Vantage Education logo">
+    </div>
+
 
     <!-- ✅ Added a wrapper class so we can style links properly on mobile -->
     <div class="nav-links">
