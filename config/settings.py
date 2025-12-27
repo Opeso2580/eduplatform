@@ -36,6 +36,8 @@ INSTALLED_APPS = [
 
     # Local apps
     "accounts",
+    "user",
+    "courses",
 ]
 
 # ----------------------------
@@ -87,13 +89,27 @@ LOGOUT_REDIRECT_URL = "student_login"
 # ----------------------------
 # Database (Postgres on Render, SQLite locally)
 # ----------------------------
-DATABASES = {
-    "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600,
-        ssl_require=not DEBUG,
-    )
-}
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    # Render / production (Postgres)
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True,
+        )
+    }
+else:
+    # Local dev (SQLite)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ----------------------------
 # Static / Media
