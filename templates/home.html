@@ -137,12 +137,35 @@
       border: 1px solid #ddd;
       border-radius: 14px;
       padding: 22px;
-      font-weight: 700;
+      font-weight: 800;
+
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-    }
+
+      text-decoration: none;   /* ✅ make link look like card */
+      color: #111;
+      background: #fff;
+
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+      cursor: pointer;
+  }
+
+  .lang-card:hover {
+    transform: translateY(-2px);
+    border-color: #c9c9c9;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+  }
+
+  .lang-card:active {
+    transform: translateY(0px);
+  }
+
+  .lang-card span {
+    font-weight: 900;
+  }
+
 
     /* ---------- HOW IT WORKS ---------- */
     .how {
@@ -351,26 +374,28 @@
     <div class="stat"><strong>Global</strong><br>Community</div>
   </section>
 
-  <!-- LANGUAGES -->
-  <section class="languages">
-    <h2>Popular Classes</h2>
-    <div class="languages-grid">
-      <div class="lang-card">Mathematics →</div>
-      <div class="lang-card">Biology</div>
-      <div class="lang-card">French →</div>
-      <div class="lang-card">German →</div>
-      <div class="lang-card">Spanish →</div>
-      <div class="lang-card">Anatomy and Physiology →</div>
-      <div class="lang-card">Physics →</div>
-      <div class="lang-card">Calculus →</div>
-      <div class="lang-card">English →</div>
-      <div class="lang-card">Chemistry →</div>
-      <div class="lang-card">Thermodynamics →</div>
-      <div class="lang-card">Fluid Mechanics →</div>
-      <div class="lang-card">Heat transfer →</div>
-      <div class="lang-card">Psychology →</div>
-    </div>
-  </section>
+ <!-- Classes -->
+<section class="languages">
+  <h2>Popular Classes</h2>
+
+  <div class="languages-grid">
+    <a class="lang-card" href="{% url 'student_courses' %}?q=Mathematics">Mathematics <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=Biology">Biology <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=French">French <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=German">German <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=Spanish">Spanish <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=Anatomy%20and%20Physiology">Anatomy and Physiology <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=Physics">Physics <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=Calculus">Calculus <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=English">English <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=Chemistry">Chemistry <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=Thermodynamics">Thermodynamics <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=Fluid%20Mechanics">Fluid Mechanics <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=Heat%20transfer">Heat transfer <span>→</span></a>
+    <a class="lang-card" href="{% url 'student_courses' %}?q=Psychology">Psychology <span>→</span></a>
+  </div>
+</section>
+
 
   <section class="features">
     <h2>Why choose Vantage Educational Services?</h2>
