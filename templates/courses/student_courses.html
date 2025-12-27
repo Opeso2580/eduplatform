@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Classes</title>
+</head>
+<body>
+
+<h2>Available Classes</h2>
+
+{% for course in courses %}
+  <div style="border:1px solid #ddd; padding:14px; margin-bottom:12px; border-radius:10px;">
+    <h3>
+      <a href="{% url 'course_detail' course.id %}">
+        {{ course.title }}
+      </a>
+    </h3>
+    <p>{{ course.description|truncatewords:25 }}</p>
+  </div>
+{% empty %}
+  <p>No classes available yet.</p>
+{% endfor %}
+
+</body>
+</html>

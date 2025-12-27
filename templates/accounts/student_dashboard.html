@@ -120,6 +120,13 @@
 
     .btn-ghost:hover { background: rgba(74,108,247,0.07); }
 
+    /* NEW: secondary button for classes */
+    .btn-secondary {
+      background: #111827;
+      color: #fff;
+    }
+    .btn-secondary:hover { background: #0b1220; }
+
     .grid {
       margin-top: 18px;
       display: grid;
@@ -220,8 +227,11 @@
       </div>
 
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <a class="btn btn-ghost" href="/student/logout/">Log out</a>
+        <!-- NEW: View classes -->
+        <a class="btn btn-secondary" href="{% url 'student_courses' %}">View My Classes</a>
+
         <a class="btn btn-primary" href="#">Continue Learning</a>
+        <a class="btn btn-ghost" href="/student/logout/">Log out</a>
       </div>
     </section>
 
@@ -274,7 +284,7 @@
     </section>
 
     <div class="footer">
-      © {{ now|default:"" }} Vantage Lingua Hub — Keep going. You’re building something solid.
+      © {% now "Y" %} Vantage Lingua Hub — Keep going. You’re building something solid.
     </div>
   </main>
 </body>
