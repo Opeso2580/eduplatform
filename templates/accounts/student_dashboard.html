@@ -89,6 +89,23 @@
       margin: 0;
       color: #6b7280;
       font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* NEW: selected course badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(74,108,247,0.10);
+      color: #1f3bb3;
+      border: 1px solid rgba(74,108,247,0.22);
+      width: fit-content;
     }
 
     .btn {
@@ -120,7 +137,7 @@
 
     .btn-ghost:hover { background: rgba(74,108,247,0.07); }
 
-    /* NEW: secondary button for classes */
+    /* secondary button for classes */
     .btn-secondary {
       background: #111827;
       color: #fff;
@@ -224,13 +241,21 @@
       <div>
         <h1>Welcome back, {{ request.user.username }} 🎓</h1>
         <p>Ready to learn? Pick up where you left off.</p>
+
+        {% if selected_course %}
+          <div class="badge">Selected course: {{ selected_course }}</div>
+        {% endif %}
       </div>
 
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <!-- NEW: View classes -->
         <a class="btn btn-secondary" href="{% url 'student_courses' %}">View My Classes</a>
 
-        <a class="btn btn-primary" href="#">Continue Learning</a>
+        <!-- If a course is selected, keep it when clicking continue -->
+        <a class="btn btn-primary"
+           href="{% url 'student_dashboard' %}{% if selected_course %}?course={{ selected_course|urlencode }}{% endif %}">
+          Continue Learning{% if selected_course %}: {{ selected_course }}{% endif %}
+        </a>
+
         <a class="btn btn-ghost" href="/student/logout/">Log out</a>
       </div>
     </section>

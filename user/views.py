@@ -201,3 +201,17 @@ def student_logout(request):
 
 def home(request):
     return render(request, "home.html")
+
+
+
+@login_required
+def student_dashboard(request):
+    selected_course = request.GET.get("course", "").strip()
+
+    # Optional: store it so you can use it later (Continue Learning button, etc.)
+    if selected_course:
+        request.session["selected_course"] = selected_course
+
+    return render(request, "accounts/student_dashboard.html", {
+        "selected_course": selected_course or request.session.get("selected_course", ""),
+    })
